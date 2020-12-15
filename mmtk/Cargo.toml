@@ -1,0 +1,34 @@
+[package]
+name = "mmtk_dotnet"
+version = "0.0.1"
+authors = [" <>"]
+
+[lib]
+name = "mmtk_dotnet"
+# be careful - LTO is only allowed for certain crate types
+crate-type = ["cdylib"]
+
+[profile.release]
+lto = true
+
+[dependencies]
+libc = "0.2"
+lazy_static = "1.1"
+log = "*"
+
+# Be very careful to commit any changes to the following mmtk dependency, as our CI scripts (including mmtk-core CI)
+# rely on matching these lines to modify them: e.g. change ssh to https with token or comment out the git dependency
+# and use the local path.
+# These changes are safe:
+# - change branch
+# - change repo name
+# But other changes including adding/removing whitespaces in commented lines may break the CI.
+mmtk = { git = "ssh://git@github.com/mmtk/mmtk-core.git", rev = "966047a1d65e5143b1331f4e2644a1712538c790" }
+# Uncomment the following and fix the path to mmtk-core to build locally
+# mmtk = { path = "../repos/mmtk-core" }
+
+[features]
+default = ["nogc"]
+nogc = ["mmtk/nogc"]
+code_space = ["mmtk/code_space"]
+ro_space = ["mmtk/ro_space"]
