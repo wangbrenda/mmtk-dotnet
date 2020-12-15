@@ -1,0 +1,4 @@
+[submodule "repos/dotnet"]
+	path = repos/dotnet
+	url = ../runtime.git
+	branch = dotnet-mmtk
