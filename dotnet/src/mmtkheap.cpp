@@ -2,8 +2,8 @@
 #include "mmtk.h"
 #include <stdio.h>
 
-#define UNIMPLEMENTED() printf("MMTkHeap::%s unimplemented\n", __func__);
-// #define UNIMPLEMENTED();
+#define UNIMPLEMENTED_VERBOSITY 1
+#define UNIMPLEMENTED(x) if (x > UNIMPLEMENTED_VERBOSITY) printf("MMTkHeap::%s unimplemented\n", __func__);
 
 class ObjHeader
 {
@@ -15,26 +15,26 @@ int allocCount = 0;
 void* handle;
 
 /*    Hosting APIs    */
-bool MMTkHeap::IsValidSegmentSize(size_t size) { UNIMPLEMENTED(); return true; }
-bool MMTkHeap::IsValidGen0MaxSize(size_t size) { UNIMPLEMENTED(); return true; }
-size_t MMTkHeap::GetValidSegmentSize(bool large_seg) { UNIMPLEMENTED(); return size_t(); }
-void MMTkHeap::SetReservedVMLimit(size_t vmlimit) { UNIMPLEMENTED(); }
+bool MMTkHeap::IsValidSegmentSize(size_t size) { UNIMPLEMENTED(2); return true; }
+bool MMTkHeap::IsValidGen0MaxSize(size_t size) { UNIMPLEMENTED(2); return true; }
+size_t MMTkHeap::GetValidSegmentSize(bool large_seg) { UNIMPLEMENTED(2); return size_t(); }
+void MMTkHeap::SetReservedVMLimit(size_t vmlimit) { UNIMPLEMENTED(2); }
 
 /*   Concurrent GC routines    */
 // We do not support concurrency in MMTk yet
-void MMTkHeap::WaitUntilConcurrentGCComplete() { UNIMPLEMENTED(); }
+void MMTkHeap::WaitUntilConcurrentGCComplete() { UNIMPLEMENTED(2); }
 bool MMTkHeap::IsConcurrentGCInProgress()
 {
     return false;
 }
-void MMTkHeap::TemporaryEnableConcurrentGC() { UNIMPLEMENTED(); }
-void MMTkHeap::TemporaryDisableConcurrentGC() { UNIMPLEMENTED(); }
-bool MMTkHeap::IsConcurrentGCEnabled() { UNIMPLEMENTED(); return false; }
-HRESULT MMTkHeap::WaitUntilConcurrentGCCompleteAsync(int millisecondsTimeout) { UNIMPLEMENTED(); return S_OK; }    // Use in native threads. TRUE if succeed. FALSE if failed or timeout
+void MMTkHeap::TemporaryEnableConcurrentGC() { UNIMPLEMENTED(2); }
+void MMTkHeap::TemporaryDisableConcurrentGC() { UNIMPLEMENTED(2); }
+bool MMTkHeap::IsConcurrentGCEnabled() { UNIMPLEMENTED(2); return false; }
+HRESULT MMTkHeap::WaitUntilConcurrentGCCompleteAsync(int millisecondsTimeout) { UNIMPLEMENTED(2); return S_OK; }    // Use in native threads. TRUE if succeed. FALSE if failed or timeout
 
 /*    Finalization routines    */
-size_t MMTkHeap::GetNumberOfFinalizable() { UNIMPLEMENTED(); return size_t(); }
-Object* MMTkHeap::GetNextFinalizable() { UNIMPLEMENTED(); return nullptr; }
+size_t MMTkHeap::GetNumberOfFinalizable() { UNIMPLEMENTED(2); return size_t(); }
+Object* MMTkHeap::GetNextFinalizable() { UNIMPLEMENTED(2); return nullptr; }
 
 /*    BCL routines    */
 void MMTkHeap::GetMemoryInfo(uint64_t* highMemLoadThresholdBytes,
@@ -53,28 +53,28 @@ void MMTkHeap::GetMemoryInfo(uint64_t* highMemLoadThresholdBytes,
                             bool* isConcurrent,
                             uint64_t* genInfoRaw,
                             uint64_t* pauseInfoRaw,
-                            int kind) { UNIMPLEMENTED(); }
-uint32_t MMTkHeap::GetMemoryLoad() { UNIMPLEMENTED(); return uint32_t(); }
-int MMTkHeap::GetGcLatencyMode() { UNIMPLEMENTED(); return 0; }
-int MMTkHeap::SetGcLatencyMode(int newLatencyMode) { UNIMPLEMENTED(); return 0; }
-int MMTkHeap::GetLOHCompactionMode() { UNIMPLEMENTED(); return 0; }
-void MMTkHeap::SetLOHCompactionMode(int newLOHCompactionMode) { UNIMPLEMENTED(); }
-bool MMTkHeap::RegisterForFullGCNotification(uint32_t gen2Percentage, uint32_t lohPercentage) { UNIMPLEMENTED(); return true; }
-bool MMTkHeap::CancelFullGCNotification() { UNIMPLEMENTED(); return true; }
-int MMTkHeap::WaitForFullGCApproach(int millisecondsTimeout) { UNIMPLEMENTED(); return 0;}
-int MMTkHeap::WaitForFullGCComplete(int millisecondsTimeout) { UNIMPLEMENTED(); return 0; }
-unsigned MMTkHeap::WhichGeneration(Object* obj) { UNIMPLEMENTED(); return 0; }
-int MMTkHeap::CollectionCount(int generation, int get_bgc_fgc_coutn) { UNIMPLEMENTED(); return 0; }
-int MMTkHeap::StartNoGCRegion(uint64_t totalSize, bool lohSizeKnown, uint64_t lohSize, bool disallowFullBlockingGC) { UNIMPLEMENTED(); return 0; }
-int MMTkHeap::EndNoGCRegion() { UNIMPLEMENTED(); return 0; }
-size_t MMTkHeap::GetTotalBytesInUse() { UNIMPLEMENTED(); return size_t(); }
-uint64_t MMTkHeap::GetTotalAllocatedBytes() { UNIMPLEMENTED(); return uint64_t(); }
-HRESULT MMTkHeap::GarbageCollect(int generation, bool low_memory_p, int mode) { UNIMPLEMENTED(); return S_OK; }
-unsigned MMTkHeap::GetMaxGeneration() { UNIMPLEMENTED(); return 0; }
-void MMTkHeap::SetFinalizationRun(Object* obj) { UNIMPLEMENTED(); }
-bool MMTkHeap::RegisterForFinalization(int gen, Object* obj) { UNIMPLEMENTED(); return true; }
-int MMTkHeap::GetLastGCPercentTimeInGC() { UNIMPLEMENTED(); return 0; }
-size_t MMTkHeap::GetLastGCGenerationSize(int gen) { UNIMPLEMENTED(); return size_t(); }
+                            int kind) { UNIMPLEMENTED(2); }
+uint32_t MMTkHeap::GetMemoryLoad() { UNIMPLEMENTED(2); return uint32_t(); }
+int MMTkHeap::GetGcLatencyMode() { UNIMPLEMENTED(2); return 0; }
+int MMTkHeap::SetGcLatencyMode(int newLatencyMode) { UNIMPLEMENTED(2); return 0; }
+int MMTkHeap::GetLOHCompactionMode() { UNIMPLEMENTED(2); return 0; }
+void MMTkHeap::SetLOHCompactionMode(int newLOHCompactionMode) { UNIMPLEMENTED(2); }
+bool MMTkHeap::RegisterForFullGCNotification(uint32_t gen2Percentage, uint32_t lohPercentage) { UNIMPLEMENTED(2); return true; }
+bool MMTkHeap::CancelFullGCNotification() { UNIMPLEMENTED(2); return true; }
+int MMTkHeap::WaitForFullGCApproach(int millisecondsTimeout) { UNIMPLEMENTED(2); return 0;}
+int MMTkHeap::WaitForFullGCComplete(int millisecondsTimeout) { UNIMPLEMENTED(2); return 0; }
+unsigned MMTkHeap::WhichGeneration(Object* obj) { UNIMPLEMENTED(2); return 0; }
+int MMTkHeap::CollectionCount(int generation, int get_bgc_fgc_coutn) { UNIMPLEMENTED(2); return 0; }
+int MMTkHeap::StartNoGCRegion(uint64_t totalSize, bool lohSizeKnown, uint64_t lohSize, bool disallowFullBlockingGC) { UNIMPLEMENTED(2); return 0; }
+int MMTkHeap::EndNoGCRegion() { UNIMPLEMENTED(2); return 0; }
+size_t MMTkHeap::GetTotalBytesInUse() { UNIMPLEMENTED(2); return size_t(); }
+uint64_t MMTkHeap::GetTotalAllocatedBytes() { UNIMPLEMENTED(2); return uint64_t(); }
+HRESULT MMTkHeap::GarbageCollect(int generation, bool low_memory_p, int mode) { UNIMPLEMENTED(2); return S_OK; }
+unsigned MMTkHeap::GetMaxGeneration() { UNIMPLEMENTED(2); return 0; }
+void MMTkHeap::SetFinalizationRun(Object* obj) { UNIMPLEMENTED(2); }
+bool MMTkHeap::RegisterForFinalization(int gen, Object* obj) { UNIMPLEMENTED(2); return true; }
+int MMTkHeap::GetLastGCPercentTimeInGC() { UNIMPLEMENTED(2); return 0; }
+size_t MMTkHeap::GetLastGCGenerationSize(int gen) { UNIMPLEMENTED(2); return size_t(); }
 
 /*    Miscellaneous routines    */
 HRESULT MMTkHeap::Initialize()
@@ -100,29 +100,29 @@ HRESULT MMTkHeap::Initialize()
 
     return NOERROR;
 }
-bool MMTkHeap::IsPromoted(Object* object) { UNIMPLEMENTED(); return false;}
+bool MMTkHeap::IsPromoted(Object* object) { UNIMPLEMENTED(2); return false;}
 bool MMTkHeap::IsHeapPointer(void* object, bool small_heap_only)
 {
     return is_mapped_object(object);
 }
-unsigned MMTkHeap::GetCondemnedGeneration() { UNIMPLEMENTED(); return 0; }
-bool MMTkHeap::IsGCInProgressHelper(bool bConsiderGCStart) { UNIMPLEMENTED(); return false;}
+unsigned MMTkHeap::GetCondemnedGeneration() { UNIMPLEMENTED(2); return 0; }
+bool MMTkHeap::IsGCInProgressHelper(bool bConsiderGCStart) { UNIMPLEMENTED(2); return false;}
 unsigned MMTkHeap::GetGcCount() { return 0; }
-bool MMTkHeap::IsThreadUsingAllocationContextHeap(gc_alloc_context* acontext, int thread_number) { UNIMPLEMENTED(); return false; }
-bool MMTkHeap::IsEphemeral(Object* object) { UNIMPLEMENTED(); return false; }
-uint32_t MMTkHeap::WaitUntilGCComplete(bool bConsiderGCStart) { UNIMPLEMENTED(); return uint32_t(); }
-void MMTkHeap::FixAllocContext(gc_alloc_context* acontext, void* arg, void* heap) { UNIMPLEMENTED(); }
-size_t MMTkHeap::GetCurrentObjSize() { UNIMPLEMENTED(); return size_t(); }
-void MMTkHeap::SetGCInProgress(bool fInProgress) { UNIMPLEMENTED(); }
-bool MMTkHeap::RuntimeStructuresValid() { UNIMPLEMENTED(); return true; }
-void MMTkHeap::SetSuspensionPending(bool fSuspensionPending) { UNIMPLEMENTED(); }
-void MMTkHeap::SetYieldProcessorScalingFactor(float yieldProcessorScalingFactor) { UNIMPLEMENTED(); }
-void MMTkHeap::Shutdown() { UNIMPLEMENTED(); }
+bool MMTkHeap::IsThreadUsingAllocationContextHeap(gc_alloc_context* acontext, int thread_number) { UNIMPLEMENTED(2); return false; }
+bool MMTkHeap::IsEphemeral(Object* object) { UNIMPLEMENTED(2); return false; }
+uint32_t MMTkHeap::WaitUntilGCComplete(bool bConsiderGCStart) { UNIMPLEMENTED(2); return uint32_t(); }
+void MMTkHeap::FixAllocContext(gc_alloc_context* acontext, void* arg, void* heap) { UNIMPLEMENTED(2); }
+size_t MMTkHeap::GetCurrentObjSize() { UNIMPLEMENTED(2); return size_t(); }
+void MMTkHeap::SetGCInProgress(bool fInProgress) { UNIMPLEMENTED(2); }
+bool MMTkHeap::RuntimeStructuresValid() { UNIMPLEMENTED(1); return true; }
+void MMTkHeap::SetSuspensionPending(bool fSuspensionPending) { UNIMPLEMENTED(2); }
+void MMTkHeap::SetYieldProcessorScalingFactor(float yieldProcessorScalingFactor) { UNIMPLEMENTED(2); }
+void MMTkHeap::Shutdown() { UNIMPLEMENTED(2); }
 
 /*    Add/RemoveMemoryPressure support routines    */
-size_t MMTkHeap::GetLastGCStartTime(int generation) { UNIMPLEMENTED(); return size_t(); }
-size_t MMTkHeap::GetLastGCDuration(int generation) { UNIMPLEMENTED(); return size_t(); }
-size_t MMTkHeap::GetNow() { UNIMPLEMENTED(); return size_t(); }
+size_t MMTkHeap::GetLastGCStartTime(int generation) { UNIMPLEMENTED(2); return size_t(); }
+size_t MMTkHeap::GetLastGCDuration(int generation) { UNIMPLEMENTED(2); return size_t(); }
+size_t MMTkHeap::GetNow() { UNIMPLEMENTED(2); return size_t(); }
 
 /*    Allocation routines    */
 Object* MMTkHeap::Alloc(gc_alloc_context* acontext, size_t size, uint32_t flags)
@@ -137,34 +137,34 @@ Object* MMTkHeap::Alloc(gc_alloc_context* acontext, size_t size, uint32_t flags)
     }
     return returnAddr;
 }
-void MMTkHeap::PublishObject(uint8_t* obj) { UNIMPLEMENTED(); }
-void MMTkHeap::SetWaitForGCEvent() { UNIMPLEMENTED(); }
-void MMTkHeap::ResetWaitForGCEvent() { UNIMPLEMENTED(); }
+void MMTkHeap::PublishObject(uint8_t* obj) { UNIMPLEMENTED(2); }
+void MMTkHeap::SetWaitForGCEvent() { UNIMPLEMENTED(2); }
+void MMTkHeap::ResetWaitForGCEvent() { UNIMPLEMENTED(2); }
 
 /*    Heap verification routines    */
-bool MMTkHeap::IsLargeObject(Object* pObj) { UNIMPLEMENTED(); return false; }
-void MMTkHeap::ValidateObjectMember(Object* obj) { UNIMPLEMENTED(); }
-Object* MMTkHeap::NextObj(Object* object) { UNIMPLEMENTED(); return nullptr; }
-Object* MMTkHeap::GetContainingObject(void* pInteriorPtr, bool fCollectedGenOnly) { UNIMPLEMENTED(); return nullptr; }
+bool MMTkHeap::IsLargeObject(Object* pObj) { UNIMPLEMENTED(1); return false; }
+void MMTkHeap::ValidateObjectMember(Object* obj) { UNIMPLEMENTED(1); }
+Object* MMTkHeap::NextObj(Object* object) { UNIMPLEMENTED(1); return nullptr; }
+Object* MMTkHeap::GetContainingObject(void* pInteriorPtr, bool fCollectedGenOnly) { UNIMPLEMENTED(1); return nullptr; }
 
 /*    Profiling routines    */
-void MMTkHeap::DiagWalkObject(Object* obj, walk_fn fn, void* context) { UNIMPLEMENTED(); }
-void MMTkHeap::DiagWalkObject2(Object* obj, walk_fn2 fn, void* context) { UNIMPLEMENTED(); }
-void MMTkHeap::DiagWalkHeap(walk_fn fn, void* context, int gen_number, bool walk_large_object_heap_p) { UNIMPLEMENTED(); }
-void MMTkHeap::DiagWalkSurvivorsWithType(void* gc_context, record_surv_fn fn, void* diag_context, walk_surv_type type, int gen_number) { UNIMPLEMENTED(); }
-void MMTkHeap::DiagWalkFinalizeQueue(void* gc_context, fq_walk_fn fn) { UNIMPLEMENTED(); }
-void MMTkHeap::DiagScanFinalizeQueue(fq_scan_fn fn, ScanContext* context) { UNIMPLEMENTED(); }
-void MMTkHeap::DiagScanHandles(handle_scan_fn fn, int gen_number, ScanContext* context) { UNIMPLEMENTED(); }
-void MMTkHeap::DiagScanDependentHandles(handle_scan_fn fn, int gen_number, ScanContext* context) { UNIMPLEMENTED(); }
-void MMTkHeap::DiagDescrGenerations(gen_walk_fn fn, void* context) { UNIMPLEMENTED(); }
-void MMTkHeap::DiagTraceGCSegments() { UNIMPLEMENTED(); }
+void MMTkHeap::DiagWalkObject(Object* obj, walk_fn fn, void* context) { UNIMPLEMENTED(2); }
+void MMTkHeap::DiagWalkObject2(Object* obj, walk_fn2 fn, void* context) { UNIMPLEMENTED(2); }
+void MMTkHeap::DiagWalkHeap(walk_fn fn, void* context, int gen_number, bool walk_large_object_heap_p) { UNIMPLEMENTED(2); }
+void MMTkHeap::DiagWalkSurvivorsWithType(void* gc_context, record_surv_fn fn, void* diag_context, walk_surv_type type, int gen_number) { UNIMPLEMENTED(2); }
+void MMTkHeap::DiagWalkFinalizeQueue(void* gc_context, fq_walk_fn fn) { UNIMPLEMENTED(2); }
+void MMTkHeap::DiagScanFinalizeQueue(fq_scan_fn fn, ScanContext* context) { UNIMPLEMENTED(2); }
+void MMTkHeap::DiagScanHandles(handle_scan_fn fn, int gen_number, ScanContext* context) { UNIMPLEMENTED(2); }
+void MMTkHeap::DiagScanDependentHandles(handle_scan_fn fn, int gen_number, ScanContext* context) { UNIMPLEMENTED(2); }
+void MMTkHeap::DiagDescrGenerations(gen_walk_fn fn, void* context) { UNIMPLEMENTED(2); }
+void MMTkHeap::DiagTraceGCSegments() { UNIMPLEMENTED(2); }
 
 /*    GC Stress routines    */
-bool MMTkHeap::StressHeap(gc_alloc_context* acontext) { UNIMPLEMENTED(); return true; }
-segment_handle MMTkHeap::RegisterFrozenSegment(segment_info *pseginfo) { UNIMPLEMENTED(); return nullptr; }
-void MMTkHeap::UnregisterFrozenSegment(segment_handle seg) { UNIMPLEMENTED(); }
-bool MMTkHeap::IsInFrozenSegment(Object *object) { UNIMPLEMENTED(); return false; }
+bool MMTkHeap::StressHeap(gc_alloc_context* acontext) { UNIMPLEMENTED(2); return true; }
+segment_handle MMTkHeap::RegisterFrozenSegment(segment_info *pseginfo) { UNIMPLEMENTED(2); return nullptr; }
+void MMTkHeap::UnregisterFrozenSegment(segment_handle seg) { UNIMPLEMENTED(2); }
+bool MMTkHeap::IsInFrozenSegment(Object *object) { UNIMPLEMENTED(2); return false; }
 
 /*    Routines for informing the GC about which events are enabled.    */
-void MMTkHeap::ControlEvents(GCEventKeyword keyword, GCEventLevel level) { UNIMPLEMENTED(); }
-void MMTkHeap::ControlPrivateEvents(GCEventKeyword keyword, GCEventLevel level) { UNIMPLEMENTED(); }
+void MMTkHeap::ControlEvents(GCEventKeyword keyword, GCEventLevel level) { UNIMPLEMENTED(2); }
+void MMTkHeap::ControlPrivateEvents(GCEventKeyword keyword, GCEventLevel level) { UNIMPLEMENTED(2); }
