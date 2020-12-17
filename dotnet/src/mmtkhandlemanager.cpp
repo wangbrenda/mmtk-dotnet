@@ -34,6 +34,14 @@ void MMTkHandleManager::StoreObjectInHandle(OBJECTHANDLE handle, Object* object)
 bool MMTkHandleManager::StoreObjectInHandleIfNull(OBJECTHANDLE handle, Object* object) { UNIMPLEMENTED();  return true; }
 void MMTkHandleManager::SetDependentHandleSecondary(OBJECTHANDLE handle, Object* object) { UNIMPLEMENTED(); }
 Object* MMTkHandleManager::GetDependentHandleSecondary(OBJECTHANDLE handle) { UNIMPLEMENTED();  return nullptr; }
-Object* MMTkHandleManager::InterlockedCompareExchangeObjectInHandle(OBJECTHANDLE handle, Object* object, Object* comparandObject) { UNIMPLEMENTED();  return nullptr; }
+Object* MMTkHandleManager::InterlockedCompareExchangeObjectInHandle(OBJECTHANDLE handle, Object* object, Object* comparandObject)
+{
+    Object** handleObject = (Object**)handle;
+    if (*handleObject == comparandObject)
+    {
+        *handleObject = object;
+    }
+    return *handleObject;
+}
 HandleType MMTkHandleManager::HandleFetchType(OBJECTHANDLE handle) { UNIMPLEMENTED();  return HNDTYPE_WEAK_SHORT; }
 void MMTkHandleManager::TraceRefCountedHandles(HANDLESCANPROC callback, uintptr_t param1, uintptr_t param2) { UNIMPLEMENTED(); }

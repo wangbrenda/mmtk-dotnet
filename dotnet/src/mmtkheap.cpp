@@ -93,7 +93,7 @@ HRESULT MMTkHeap::Initialize()
     gcToCLR->StompWriteBarrier(&args);
     printf("Stomping Write Barrier\n");
 
-    void* mmtk = gc_init(1024 * 1024);
+    void* mmtk = gc_init(10 * 1024 * 1024);
     printf("Initializing MMTK Heap\n");
     handle = bind_mutator(mmtk, 0);
     printf("Binding MMTK Mutator\n");
@@ -127,15 +127,15 @@ size_t MMTkHeap::GetNow() { UNIMPLEMENTED(); return size_t(); }
 /*    Allocation routines    */
 Object* MMTkHeap::Alloc(gc_alloc_context* acontext, size_t size, uint32_t flags)
 {
-    //todo: this allocation function is broken ; v ;
-    int sizeWithHeader = size + sizeof(ObjHeader) + sizeof(ObjHeader);
-    printf("Alloc: size=%d,header=%d\n", size, sizeof(ObjHeader));
-
-    ObjHeader* address = (ObjHeader*)alloc(handle, sizeWithHeader, 32, 0, 0);
-
-    printf("MMTk Alloc %d %p\n", allocCount, address);
+    size_t sizeWithHeader = size + sizeof(ObjHeader) * 8;
+    ObjHeader* address = (ObjHeader*)alloc(handle, sizeWithHeader, 16, 16, 0);
+    if (address == nullptr) printf("Out of memory exception occurred in MMTk\n");
+    Object* returnAddr = (Object*)(address + 4);
     allocCount++;
-    return (Object*)(address + 4);
+    if (allocCount % 100 == 0) {
+        printf("Allocated %d objects\n", allocCount);
+    }
+    return returnAddr;
 }
 void MMTkHeap::PublishObject(uint8_t* obj) { UNIMPLEMENTED(); }
 void MMTkHeap::SetWaitForGCEvent() { UNIMPLEMENTED(); }
