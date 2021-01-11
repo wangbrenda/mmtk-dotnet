@@ -22,6 +22,15 @@ public:
 
     virtual OBJECTHANDLE CreateDependentHandle(Object* primary, Object* secondary) override;
 
+    Object* GetDependentHandleSecondary(OBJECTHANDLE handle);
+
+    void SetDependentHandleSecondary(OBJECTHANDLE handle, Object* secondary);
+
+    OBJECTHANDLE CreateDuplicateHandle(OBJECTHANDLE handle);
+
     void DestroyHandleOfType(OBJECTHANDLE handle, HandleType type);
 
+    Object* InterlockedCompareExchangeObjectInHandle(OBJECTHANDLE handle, Object* object, Object* comparandObject);
+
+    void StoreObjectInHandle(OBJECTHANDLE handle, Object* object);
 };

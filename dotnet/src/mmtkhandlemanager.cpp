@@ -1,5 +1,5 @@
+#include <stdio.h> // printing
 #include "mmtkhandlemanager.h"
-#include <stdio.h>
 
 #define UNIMPLEMENTED() printf("%s unimplemented\n", __func__);
 
@@ -28,20 +28,20 @@ void MMTkHandleManager::SetExtraInfoForHandle(OBJECTHANDLE handle, HandleType ty
 void* MMTkHandleManager::GetExtraInfoFromHandle(OBJECTHANDLE handle) { UNIMPLEMENTED();  return nullptr; }
 void MMTkHandleManager::StoreObjectInHandle(OBJECTHANDLE handle, Object* object)
 {
-    Object** handleObj = (Object**)handle;
-    *handleObj = object;
+    handleStore.StoreObjectInHandle(handle, object);
 }
 bool MMTkHandleManager::StoreObjectInHandleIfNull(OBJECTHANDLE handle, Object* object) { UNIMPLEMENTED();  return true; }
-void MMTkHandleManager::SetDependentHandleSecondary(OBJECTHANDLE handle, Object* object) { UNIMPLEMENTED(); }
-Object* MMTkHandleManager::GetDependentHandleSecondary(OBJECTHANDLE handle) { UNIMPLEMENTED();  return nullptr; }
+void MMTkHandleManager::SetDependentHandleSecondary(OBJECTHANDLE handle, Object* object)
+{
+    return handleStore.SetDependentHandleSecondary(handle, object);
+}
+Object* MMTkHandleManager::GetDependentHandleSecondary(OBJECTHANDLE handle)
+{
+    return handleStore.GetDependentHandleSecondary(handle);
+}
 Object* MMTkHandleManager::InterlockedCompareExchangeObjectInHandle(OBJECTHANDLE handle, Object* object, Object* comparandObject)
 {
-    Object** handleObject = (Object**)handle;
-    if (*handleObject == comparandObject)
-    {
-        *handleObject = object;
-    }
-    return *handleObject;
+    return handleStore.InterlockedCompareExchangeObjectInHandle(handle, object, comparandObject);
 }
 HandleType MMTkHandleManager::HandleFetchType(OBJECTHANDLE handle) { UNIMPLEMENTED();  return HNDTYPE_WEAK_SHORT; }
 void MMTkHandleManager::TraceRefCountedHandles(HANDLESCANPROC callback, uintptr_t param1, uintptr_t param2) { UNIMPLEMENTED(); }
