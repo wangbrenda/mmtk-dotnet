@@ -19,11 +19,17 @@ OBJECTHANDLE MMTkHandleManager::CreateGlobalHandleOfType(Object* object, HandleT
 {
     return handleStore.CreateHandleOfType(object, type);
 }
-OBJECTHANDLE MMTkHandleManager::CreateDuplicateHandle(OBJECTHANDLE handle) { UNIMPLEMENTED();  return nullptr; }
+OBJECTHANDLE MMTkHandleManager::CreateDuplicateHandle(OBJECTHANDLE handle)
+{
+    return handleStore.CreateDuplicateHandle(handle);
+}
 void MMTkHandleManager::DestroyHandleOfType(OBJECTHANDLE handle, HandleType type) {
     handleStore.DestroyHandleOfType(handle, type);
 }
-void MMTkHandleManager::DestroyHandleOfUnknownType(OBJECTHANDLE handle) { UNIMPLEMENTED(); }
+void MMTkHandleManager::DestroyHandleOfUnknownType(OBJECTHANDLE handle)
+{
+    handleStore.DestroyHandleOfType(handle, HNDTYPE_PINNED /* placeholder */);
+}
 void MMTkHandleManager::SetExtraInfoForHandle(OBJECTHANDLE handle, HandleType type, void* pExtraInfo) { UNIMPLEMENTED(); }
 void* MMTkHandleManager::GetExtraInfoFromHandle(OBJECTHANDLE handle) { UNIMPLEMENTED();  return nullptr; }
 void MMTkHandleManager::StoreObjectInHandle(OBJECTHANDLE handle, Object* object)

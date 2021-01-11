@@ -19,8 +19,14 @@ OBJECTHANDLE MMTkHandleStore::CreateHandleOfType(Object* object, HandleType type
 
 OBJECTHANDLE MMTkHandleStore::CreateHandleOfType(Object* object, HandleType type, int heapToAffinitizeTo) { UNIMPLEMENTED(); return nullptr; }
 OBJECTHANDLE MMTkHandleStore::CreateHandleWithExtraInfo(Object* object, HandleType type, void* pExtraInfo) { UNIMPLEMENTED(); return nullptr; }
-OBJECTHANDLE MMTkHandleStore::CreateDependentHandle(Object* primary, Object* secondary) { UNIMPLEMENTED(); return nullptr; }
-OBJECTHANDLE MMTkHandleStore::CreateDuplicateHandle(OBJECTHANDLE handle) { UNIMPLEMENTED(); }
+OBJECTHANDLE MMTkHandleStore::CreateDependentHandle(Object* primary, Object* secondary)
+{
+    return CreateHandleOfType(primary, HNDTYPE_DEPENDENT);
+}
+OBJECTHANDLE MMTkHandleStore::CreateDuplicateHandle(OBJECTHANDLE handle) 
+{
+    
+}
 void MMTkHandleStore::SetDependentHandleSecondary(OBJECTHANDLE handle, Object* secondary) { UNIMPLEMENTED(); }
 Object* MMTkHandleStore::GetDependentHandleSecondary(OBJECTHANDLE handle) { UNIMPLEMENTED(); }
 
@@ -37,10 +43,10 @@ void MMTkHandleStore::DestroyHandleOfType(OBJECTHANDLE handle, HandleType type)
 }
 void MMTkHandleStore::StoreObjectInHandle(OBJECTHANDLE handle, Object* object)
 {
-    m.lock();
+    // m.lock();
     Object** handleObj = (Object**)handle;
     *handleObj = object;
-    m.unlock();
+    // m.unlock();
 }
 Object* MMTkHandleStore::InterlockedCompareExchangeObjectInHandle(OBJECTHANDLE handle, Object* object, Object* comparandObject)
 {
