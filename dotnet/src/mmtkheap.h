@@ -13,6 +13,7 @@ class MMTkHeap : public IGCHeap
 private:
     IGCToCLR* gcToCLR;
     MMTkHandleManager* handleManager;
+    bool isVMSuspended;
 
 public:
     MMTkHeap(IGCToCLR* gcToCLR, MMTkHandleManager* handleManager)

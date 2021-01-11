@@ -1,3 +1,5 @@
+add_definitions(-DHOST_64BIT -DHOST_X86 -DTARGET_UNIX)
+
 include_directories(
     ${ABSOLUTE_CORECLR_FOR_CUSTOM_GC}/gc/env
     ${ABSOLUTE_CORECLR_FOR_CUSTOM_GC}/gc

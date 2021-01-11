@@ -1,15 +1,12 @@
+#include <stdio.h>
+#include <mutex>
 #include "mmtkheap.h"
 #include "mmtk.h"
-#include <stdio.h>
-
+#define ASSERT assert
+#include "gcenv.interlocked.h"
+#include "gcenv.object.h"
 #define UNIMPLEMENTED_VERBOSITY 1
 #define UNIMPLEMENTED(x) if (x > UNIMPLEMENTED_VERBOSITY) printf("MMTkHeap::%s unimplemented\n", __func__);
-
-class ObjHeader
-{
-private:
-    DWORD m_SyncBlockValue;
-};
 
 int allocCount = 0;
 void* handle;
@@ -106,14 +103,23 @@ bool MMTkHeap::IsHeapPointer(void* object, bool small_heap_only)
     return is_mapped_object(object);
 }
 unsigned MMTkHeap::GetCondemnedGeneration() { UNIMPLEMENTED(2); return 0; }
-bool MMTkHeap::IsGCInProgressHelper(bool bConsiderGCStart) { UNIMPLEMENTED(2); return false;}
+bool MMTkHeap::IsGCInProgressHelper(bool bConsiderGCStart)
+{
+    // Currently, a GC is never performed
+    return isVMSuspended;
+}
 unsigned MMTkHeap::GetGcCount() { return 0; }
 bool MMTkHeap::IsThreadUsingAllocationContextHeap(gc_alloc_context* acontext, int thread_number) { UNIMPLEMENTED(2); return false; }
 bool MMTkHeap::IsEphemeral(Object* object) { UNIMPLEMENTED(2); return false; }
 uint32_t MMTkHeap::WaitUntilGCComplete(bool bConsiderGCStart) { UNIMPLEMENTED(2); return uint32_t(); }
 void MMTkHeap::FixAllocContext(gc_alloc_context* acontext, void* arg, void* heap) { UNIMPLEMENTED(2); }
 size_t MMTkHeap::GetCurrentObjSize() { UNIMPLEMENTED(2); return size_t(); }
-void MMTkHeap::SetGCInProgress(bool fInProgress) { UNIMPLEMENTED(2); }
+void MMTkHeap::SetGCInProgress(bool fInProgress)
+{
+    // The VM calls this function with true when they are suspended
+    // It does not mean that it is triggering a GC
+    isVMSuspended = fInProgress;
+}
 bool MMTkHeap::RuntimeStructuresValid() { UNIMPLEMENTED(1); return true; }
 void MMTkHeap::SetSuspensionPending(bool fSuspensionPending) { UNIMPLEMENTED(2); }
 void MMTkHeap::SetYieldProcessorScalingFactor(float yieldProcessorScalingFactor) { UNIMPLEMENTED(2); }
