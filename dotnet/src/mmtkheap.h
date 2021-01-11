@@ -15,10 +15,10 @@ private:
     MMTkHandleManager* handleManager;
 
 public:
-	MMTkHeap(IGCToCLR* gcToCLR, MMTkHandleManager* handleManager)
+    MMTkHeap(IGCToCLR* gcToCLR, MMTkHandleManager* handleManager)
     {
-		this->gcToCLR = gcToCLR;
-		this->handleManager = handleManager;
+        this->gcToCLR = gcToCLR;
+        this->handleManager = handleManager;
     }
 
    /*    Hosting APIs    */
