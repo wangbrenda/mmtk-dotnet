@@ -5,7 +5,7 @@
 #define ASSERT assert
 #include "gcenv.interlocked.h"
 #include "gcenv.object.h"
-#define UNIMPLEMENTED_VERBOSITY 1
+#define UNIMPLEMENTED_VERBOSITY 20
 #define UNIMPLEMENTED(x) if (x > UNIMPLEMENTED_VERBOSITY) printf("MMTkHeap::%s unimplemented\n", __func__);
 
 std::mutex mut; // for correctness purposes;
@@ -89,12 +89,9 @@ HRESULT MMTkHeap::Initialize()
     args.ephemeral_low = reinterpret_cast<uint8_t*>(~0);
     args.ephemeral_high = reinterpret_cast<uint8_t*>(1);
     gcToCLR->StompWriteBarrier(&args);
-    printf("Stomping Write Barrier\n");
 
     void* mmtk = gc_init(10 * 1024 * 1024);
-    printf("Initializing MMTK Heap\n");
     handle = bind_mutator(mmtk, 0);
-    printf("Binding MMTK Mutator\n");
 
     return NOERROR;
 }

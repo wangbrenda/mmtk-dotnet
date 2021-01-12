@@ -25,7 +25,7 @@ GC_Initialize(
     /* Out */ GcDacVars* gcDacVars
 )
 {
-    printf("Calling MMTkGC_Initialise\n");
+    // printf("Calling MMTkGC_Initialise\n");
     MMTkHandleManager* handleManager = new MMTkHandleManager();
     MMTkHeap* heap = new MMTkHeap(clrToGC, handleManager);
     *gcHeap = heap;
@@ -38,7 +38,7 @@ GC_VersionInfo(
     /* Out */ VersionInfo* result
 )
 {
-    printf("Calling MMTkGC_VersionInfo\n");
+    // printf("Calling MMTkGC_VersionInfo\n");
     result->MajorVersion = GC_INTERFACE_MAJOR_VERSION;
     result->MinorVersion = GC_INTERFACE_MINOR_VERSION;
     result->BuildVersion = 0;
