@@ -8,6 +8,7 @@
 #define UNIMPLEMENTED_VERBOSITY 1
 #define UNIMPLEMENTED(x) if (x > UNIMPLEMENTED_VERBOSITY) printf("MMTkHeap::%s unimplemented\n", __func__);
 
+std::mutex mut; // for correctness purposes;
 int allocCount = 0;
 void* handle;
 
@@ -133,15 +134,11 @@ size_t MMTkHeap::GetNow() { UNIMPLEMENTED(2); return size_t(); }
 /*    Allocation routines    */
 Object* MMTkHeap::Alloc(gc_alloc_context* acontext, size_t size, uint32_t flags)
 {
-    size_t sizeWithHeader = size + sizeof(ObjHeader) * 8;
-    ObjHeader* address = (ObjHeader*)alloc(handle, sizeWithHeader, 16, 16, 0);
-    if (address == nullptr) printf("Out of memory exception occurred in MMTk\n");
-    Object* returnAddr = (Object*)(address + 4);
-    allocCount++;
-    if (allocCount % 100 == 0) {
-        printf("Allocated %d objects\n", allocCount);
-    }
-    return returnAddr;
+    mut.lock();
+    int sizeWithHeader = size + sizeof(ObjHeader);
+    ObjHeader* address = (ObjHeader*) alloc(handle, sizeWithHeader, 8, 0, 0);
+    mut.unlock();
+    return (Object*) (address + 2);
 }
 void MMTkHeap::PublishObject(uint8_t* obj) { UNIMPLEMENTED(2); }
 void MMTkHeap::SetWaitForGCEvent() { UNIMPLEMENTED(2); }
