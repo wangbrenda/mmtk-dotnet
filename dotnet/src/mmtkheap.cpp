@@ -131,11 +131,33 @@ size_t MMTkHeap::GetNow() { UNIMPLEMENTED(2); return size_t(); }
 /*    Allocation routines    */
 Object* MMTkHeap::Alloc(gc_alloc_context* acontext, size_t size, uint32_t flags)
 {
-    mut.lock();
-    int sizeWithHeader = size + sizeof(ObjHeader);
-    ObjHeader* address = (ObjHeader*) alloc(handle, sizeWithHeader, 8, 0, 0);
-    mut.unlock();
-    return (Object*) (address + 2);
+    if (size > 8000)
+    {
+        mut.lock();
+        int sizeWithHeader = size + sizeof(ObjHeader);
+        ObjHeader* address = (ObjHeader*) alloc(handle, sizeWithHeader, 8, 0, 0);
+        mut.unlock();
+        return (Object*) (address + 2); // fixme: change to variable
+    }
+    else
+    {
+        uint8_t* result = acontext->alloc_ptr;
+        uint8_t* advance = result + size;
+        if (advance <= acontext->alloc_limit)
+        {
+            acontext->alloc_ptr = advance;
+            return (Object* )result;
+        }
+        int beginGap = 24;
+        int growthSize = 16 * 1024 * 1024;
+        mut.lock();
+        uint8_t* newPages = (uint8_t*)alloc(handle, growthSize, 16, 0, 0);
+        mut.unlock();
+        uint8_t* allocationStart = newPages + beginGap;
+        acontext->alloc_ptr = allocationStart + (((size/8) + 1) * 8);
+        acontext->alloc_limit = newPages + growthSize;
+        return (Object*)(allocationStart);
+    }
 }
 void MMTkHeap::PublishObject(uint8_t* obj) { UNIMPLEMENTED(2); }
 void MMTkHeap::SetWaitForGCEvent() { UNIMPLEMENTED(2); }
