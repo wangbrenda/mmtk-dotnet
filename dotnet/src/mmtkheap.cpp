@@ -8,9 +8,7 @@
 #define UNIMPLEMENTED_VERBOSITY 20
 #define UNIMPLEMENTED(x) if (x > UNIMPLEMENTED_VERBOSITY) printf("MMTkHeap::%s unimplemented\n", __func__);
 
-std::mutex mut; // for correctness purposes;
 int allocCount = 0;
-void* handle;
 
 /*    Hosting APIs    */
 bool MMTkHeap::IsValidSegmentSize(size_t size) { UNIMPLEMENTED(2); return true; }
@@ -89,10 +87,6 @@ HRESULT MMTkHeap::Initialize()
     args.ephemeral_low = reinterpret_cast<uint8_t*>(~0);
     args.ephemeral_high = reinterpret_cast<uint8_t*>(1);
     gcToCLR->StompWriteBarrier(&args);
-
-    void* mmtk = gc_init(10 * 1024 * 1024);
-    handle = bind_mutator(mmtk, 0);
-
     return NOERROR;
 }
 bool MMTkHeap::IsPromoted(Object* object) { UNIMPLEMENTED(2); return false;}
@@ -131,12 +125,11 @@ size_t MMTkHeap::GetNow() { UNIMPLEMENTED(2); return size_t(); }
 /*    Allocation routines    */
 Object* MMTkHeap::Alloc(gc_alloc_context* acontext, size_t size, uint32_t flags)
 {
+    void* handle = acontext->gc_reserved_2;
     if (size > 8000)
     {
-        mut.lock();
         int sizeWithHeader = size + sizeof(ObjHeader);
         ObjHeader* address = (ObjHeader*) alloc(handle, sizeWithHeader, 8, 0, 0);
-        mut.unlock();
         return (Object*) (address + 2); // fixme: change to variable
     }
     else
@@ -150,9 +143,7 @@ Object* MMTkHeap::Alloc(gc_alloc_context* acontext, size_t size, uint32_t flags)
         }
         int beginGap = 24;
         int growthSize = 16 * 1024 * 1024;
-        mut.lock();
         uint8_t* newPages = (uint8_t*)alloc(handle, growthSize, 16, 0, 0);
-        mut.unlock();
         uint8_t* allocationStart = newPages + beginGap;
         acontext->alloc_ptr = allocationStart + (((size/8) + 1) * 8);
         acontext->alloc_limit = newPages + growthSize;

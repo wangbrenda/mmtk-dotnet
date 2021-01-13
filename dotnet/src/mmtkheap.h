@@ -8,11 +8,17 @@
 #include "gcenv.base.h"
 #include "gcinterface.h"
 
+typedef void* MMTkHandle;
+
+
+#include "mmtk.h"
+
 class MMTkHeap : public IGCHeap 
 {
 private:
     IGCToCLR* gcToCLR;
     MMTkHandleManager* handleManager;
+    MMTkHandle mmtk;
     bool isVMSuspended;
 
 public:
@@ -20,6 +26,19 @@ public:
     {
         this->gcToCLR = gcToCLR;
         this->handleManager = handleManager;
+        this->mmtk = gc_init(10 * 1024 * 1024);
+    }
+
+    /*    Binding Functions    */
+    virtual GCThreadHandle BindThread(void* tls) override
+    {
+        GCThreadHandle handle = bind_mutator(mmtk, 0);
+        printf("binding {%p} {%p}\n", tls, handle);
+        return handle;
+    }
+    virtual void UnbindThread(GCThreadHandle handle) override
+    {
+        printf("unbinding lol\n");
     }
 
    /*    Hosting APIs    */
