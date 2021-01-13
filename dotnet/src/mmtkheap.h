@@ -33,12 +33,11 @@ public:
     virtual GCThreadHandle BindThread(void* tls) override
     {
         GCThreadHandle handle = bind_mutator(mmtk, 0);
-        printf("binding {%p} {%p}\n", tls, handle);
         return handle;
     }
     virtual void UnbindThread(GCThreadHandle handle) override
     {
-        printf("unbinding lol\n");
+        destroy_mutator(handle);
     }
 
    /*    Hosting APIs    */
